@@ -1,0 +1,33 @@
+.logoContainer {
+  width: 150px;
+  transition: all 0.5s;
+  position: absolute;
+  top: 30px;
+  z-index: 1;
+}
+
+.logoContainer:hover {
+  transform: scale(1.1);
+}
+
+.tiltBox {
+  height: 150px;
+  width: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #ffffff17;
+  transform: perspective(1000px);
+  transform-style: preserve-3d;
+  border-radius: 100px;
+}
+
+.logoImg {
+  transform: translateZ(40px) scale(0.8);
+  height: 85px;
+  width: 85px;
+}
+
+.gap {
+  height: 11rem;
+}
