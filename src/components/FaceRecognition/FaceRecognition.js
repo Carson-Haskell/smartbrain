@@ -7,10 +7,8 @@ function FaceRecognition({ imageUrl, faceLocations }) {
   const calculateFaceLocations = () => {
     const image = document.getElementById('inputimage');
 
-    const width = Number(image.width);
-    const height = Number(image.height);
-
-    console.log({ width, height });
+    const width = Number(image.clientWidth);
+    const height = Number(image.clientHeight);
 
     return {
       leftCol: faceLocations?.left_col * width,
@@ -21,15 +19,15 @@ function FaceRecognition({ imageUrl, faceLocations }) {
   };
 
   return (
-    <div className={`${styles.imageContainer}`}>
-      <div className="absolute ">
+    <div className={styles.imageContainer}>
+      <div className="absolute">
         <img
           id="inputimage"
           src={imageUrl}
           alt="person"
           width="400"
           height="auto"
-          className={styles.img}
+          className={`${styles.img} shadow-2`}
           onLoad={() => setBox(calculateFaceLocations())}
         />
         {box && (

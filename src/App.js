@@ -5,6 +5,8 @@ import Rank from './components/Rank';
 import ImageLinkForm from './components/ImageLinkForm';
 import FaceRecognition from './components/FaceRecognition';
 import ParticlesBg from 'particles-bg';
+import SignIn from './components/SignIn';
+import Register from './components/Register';
 
 import { useState } from 'react';
 
@@ -50,6 +52,8 @@ function App() {
   const [imageUrl, setImageUrl] = useState('');
   const [showImage, setShowImage] = useState(false);
   const [faceLocations, setFaceLocations] = useState();
+  const [route, setRoute] = useState('signin');
+  const [signedIn, setSignedIn] = useState(false);
 
   const handleSubmit = async () => {
     if (input === '') return;
@@ -68,24 +72,50 @@ function App() {
     }
   };
 
+  const onRouteChange = (newRoute) => {
+    if (newRoute === 'home') {
+      setSignedIn(true);
+      setRoute(newRoute);
+    } else if (newRoute === 'signout') {
+      setSignedIn(false);
+      setRoute('signin');
+    } else {
+      setRoute(newRoute);
+    }
+  };
+
   return (
     <div className="app">
       <ParticlesBg type="cobweb" bg={true} num={150} />
-      <Navigation />
+      <Navigation onRouteChange={onRouteChange} signedIn={signedIn} />
       <Logo />
-      {!showImage && (
+      {route === 'home' ? (
         <>
-          <Rank />
-          <ImageLinkForm setInput={setInput} handleSubmit={handleSubmit} />
+          {!showImage && (
+            <>
+              <Rank />
+              <ImageLinkForm setInput={setInput} handleSubmit={handleSubmit} />
+            </>
+          )}
+          {showImage && (
+            <div className="container">
+              <button
+                className="back-btn grow shadow-2"
+                onClick={() => setShowImage(!showImage)}
+              >
+                Try again
+              </button>
+              <FaceRecognition
+                imageUrl={imageUrl}
+                faceLocations={faceLocations}
+              />
+            </div>
+          )}
         </>
-      )}
-      {showImage && (
-        <div className="container">
-          <button className="back-btn" onClick={() => setShowImage(!showImage)}>
-            Try again
-          </button>
-          <FaceRecognition imageUrl={imageUrl} faceLocations={faceLocations} />
-        </div>
+      ) : route === 'signin' ? (
+        <SignIn onRouteChange={onRouteChange} />
+      ) : (
+        <Register onRouteChange={onRouteChange} />
       )}
     </div>
   );

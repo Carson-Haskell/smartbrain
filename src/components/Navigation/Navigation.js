@@ -1,11 +1,17 @@
 import React from 'react';
 import styles from './Navigation.module.css';
 
-function Navigation() {
+function Navigation({ onRouteChange, signedIn }) {
   return (
     <nav className={styles.navigation}>
-      {/* <p className="f3 link dim black pa3 pointer white">Sign Out</p> */}
-      <button className={`${styles.userBtn}`}>Sign out</button>
+      {signedIn && (
+        <button
+          className={`${styles.userBtn} shadow-2 grow`}
+          onClick={() => onRouteChange('signout')}
+        >
+          Sign out
+        </button>
+      )}
     </nav>
   );
 }

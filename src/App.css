@@ -20,12 +20,11 @@
 .back-btn {
   padding: 1rem 2rem;
   border-radius: 40px;
+  background-color: #ffffff17;
+  color: white;
+  font-weight: bold;
 }
 
-.back-btn:active:after {
-  border-radius: 40px !important;
-}
-
-.back-btn:after {
-  border-radius: 40px !important;
+.back-btn:hover {
+  background-color: #ffffff17;
 }
