@@ -54,18 +54,42 @@ function App() {
   const [faceLocations, setFaceLocations] = useState();
   const [route, setRoute] = useState('signin');
   const [signedIn, setSignedIn] = useState(false);
+  const [user, setUser] = useState({});
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
     if (input === '') return;
 
     try {
       const res = await fetch(API_ENDPOINT, getRequestOptions(input));
-      const json = await res.json();
+
+      if (!res.ok) {
+        throw new Error('Error loading image', res.status);
+      }
+
+      try {
+        const entriesResponse = await fetch('http://localhost:3000/image', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: user.id }),
+        });
+
+        if (entriesResponse.ok) {
+          const entries = await entriesResponse.json();
+
+          setUser({ ...user, entries });
+        }
+      } catch (entryError) {
+        console.log(entryError);
+      }
+
+      const imageData = await res.json();
 
       setImageUrl(input);
       setShowImage(true);
       setFaceLocations(
-        json.outputs[0]?.data?.regions[0]?.region_info.bounding_box,
+        imageData.outputs[0]?.data?.regions[0]?.region_info.bounding_box,
       );
     } catch (err) {
       console.log(err);
@@ -84,6 +108,8 @@ function App() {
     }
   };
 
+  const loginUser = (user) => setUser(user);
+
   return (
     <div className="app">
       <ParticlesBg type="cobweb" bg={true} num={150} />
@@ -93,7 +119,7 @@ function App() {
         <>
           {!showImage && (
             <>
-              <Rank />
+              <Rank name={user.name} entries={user.entries} />
               <ImageLinkForm setInput={setInput} handleSubmit={handleSubmit} />
             </>
           )}
@@ -113,9 +139,9 @@ function App() {
           )}
         </>
       ) : route === 'signin' ? (
-        <SignIn onRouteChange={onRouteChange} />
+        <SignIn onRouteChange={onRouteChange} loginUser={loginUser} />
       ) : (
-        <Register onRouteChange={onRouteChange} />
+        <Register onRouteChange={onRouteChange} loginUser={loginUser} />
       )}
     </div>
   );
