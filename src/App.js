@@ -101,11 +101,19 @@ function App() {
       setSignedIn(true);
       setRoute(newRoute);
     } else if (newRoute === 'signout') {
-      setSignedIn(false);
+      endSession();
+      setImageUrl();
       setRoute('signin');
     } else {
       setRoute(newRoute);
     }
+  };
+
+  const endSession = () => {
+    setSignedIn(false);
+    setUser({});
+    setShowImage(false);
+    setImageUrl();
   };
 
   const loginUser = (user) => setUser(user);
