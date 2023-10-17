@@ -25,7 +25,7 @@ function SignIn({ onRouteChange, loginUser }) {
 
       const user = await response.json();
 
-      if (user) {
+      if (user.id) {
         loginUser(user);
         onRouteChange('home');
       }

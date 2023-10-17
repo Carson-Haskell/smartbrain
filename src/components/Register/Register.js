@@ -10,6 +10,8 @@ function Register({ onRouteChange, loginUser }) {
   const onSubmit = async (e) => {
     e.preventDefault();
 
+    if (!name || !email || !password) return;
+
     try {
       const response = await fetch('http://localhost:3000/register', {
         method: 'POST',
