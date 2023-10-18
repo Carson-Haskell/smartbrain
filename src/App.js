@@ -25,22 +25,28 @@ function App() {
     if (input === '') return;
 
     try {
-      const res = await fetch('http://localhost:3000/imageurl', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ input }),
-      });
+      const res = await fetch(
+        'https://smartbrain-api-ittv.onrender.com/imageurl',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ input }),
+        },
+      );
 
       if (!res.ok) {
         throw new Error('Error loading image', res.status);
       }
 
       try {
-        const entriesResponse = await fetch('http://localhost:3000/image', {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ id: user.id }),
-        });
+        const entriesResponse = await fetch(
+          'https://smartbrain-api-ittv.onrender.com/image',
+          {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id: user.id }),
+          },
+        );
 
         if (entriesResponse.ok) {
           const entries = await entriesResponse.json();
