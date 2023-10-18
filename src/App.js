@@ -10,43 +10,6 @@ import Register from './components/Register';
 
 import { useState } from 'react';
 
-const getRequestOptions = (imageUrl) => {
-  const PAT = '1ba2de1f3a26480788a152c5e37fa183';
-  const USER_ID = 'carsonhas';
-  const APP_ID = 'smartbrain';
-  const IMAGE_URL = imageUrl;
-
-  const raw = JSON.stringify({
-    user_app_id: {
-      user_id: USER_ID,
-      app_id: APP_ID,
-    },
-    inputs: [
-      {
-        data: {
-          image: {
-            url: IMAGE_URL,
-          },
-        },
-      },
-    ],
-  });
-
-  const requestOptions = {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      Authorization: 'Key ' + PAT,
-    },
-    body: raw,
-  };
-
-  return requestOptions;
-};
-
-const API_ENDPOINT =
-  'https://api.clarifai.com/v2/models/face-detection/outputs';
-
 function App() {
   const [input, setInput] = useState('');
   const [imageUrl, setImageUrl] = useState('');
@@ -62,7 +25,11 @@ function App() {
     if (input === '') return;
 
     try {
-      const res = await fetch(API_ENDPOINT, getRequestOptions(input));
+      const res = await fetch('http://localhost:3000/imageurl', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ input }),
+      });
 
       if (!res.ok) {
         throw new Error('Error loading image', res.status);
